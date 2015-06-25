@@ -2,7 +2,8 @@ var request = require('axios')
 
 var WebpackFeatures = function(featuresContext) {
     this.each = function(fn) {
-        this.list().then(function(files) {
+        this.list().then(function() {
+            var files = arguments[0]
             files.forEach(fn)
         })
     }
@@ -17,20 +18,16 @@ var WebpackFeatures = function(featuresContext) {
             pendingRequests.push(req)
         })
 
-        return request.all(pendingRequests).then(request.spread(this.handleResponse))
+        var all = request.all(pendingRequests).then(this.handleResponse)
+        return all
     }
 
     this.handleResponse = function() {
-        var args = Array.prototype.slice.call(arguments);
-        var files = []
-
-        if (typeof args[0] === 'object') {
-            files = args.map(function(arg) {
-                return arg[0]
-            })
-        } else {
-            files = [args[0]]
-        }
+        var args = Array.prototype.slice.call(arguments)
+        var responses = args[0]
+        var files = responses.map(function(f) {
+            return f.data
+        })
 
         return files
     }
