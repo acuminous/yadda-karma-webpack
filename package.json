@@ -11,6 +11,7 @@
   "mainOutput": "main",
   "dependencies": {
     "axios": "^0.5.4",
+    "jquery": "^2.1.4",
     "normalize.css": "~3.0.3",
     "react": "~0.13.2"
   },
