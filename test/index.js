@@ -1,7 +1,7 @@
 var Yadda = require('yadda')
 var WebpackFeatures = require('./WebpackFeatures')
 
-Yadda.plugins.jasmine.StepLevelPlugin.init({parser: new Yadda.parsers.FeatureParser()});
+Yadda.plugins.jasmine.ScenarioLevelPlugin.init({parser: new Yadda.parsers.FeatureParser()});
 
 var featuresContext = require.context('.', true, /\.feature$/)
 var librariesContext = require.context('.', true, /\.library\.js$/)
@@ -13,10 +13,8 @@ new WebpackFeatures(featuresContext).each(function(file) {
         })
         var yadda = Yadda.createInstance(libraries)
 
-        scenarios(feature.scenarios, function(scenario) {
-            steps(scenario.steps, function(step, done) {
-                yadda.run(step, done)
-            })
+        scenarios(feature.scenarios, function(scenario, done) {
+            yadda.run(scenario.steps, {}, done)
         })
     })
 })
